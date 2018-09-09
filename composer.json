@@ -9,10 +9,16 @@
             "email": "bzh99@hotmail.com"
         }
     ],
-    "require": { },
+    "require": {
+        "php": ">=5.3.0"
+               },
     "autoload": {
         "psr-4": [
+<<<<<<< HEAD
            "Discapi\\": "src/discapi" 
+=======
+           "src/" 
+>>>>>>> 5344041d1d7fc5f28ce262378417d9bc47bf4d55
         ]
     }
 }

@@ -16,11 +16,9 @@
      * @noinspection MoreThanThreeArgumentsInspection
      **/
 
-<<<<<<< HEAD:src/discapi/DiscourseAPI.php
+
     namespace discapi;
-=======
-    namespace bennybian\discourseAPI;
->>>>>>> 5344041d1d7fc5f28ce262378417d9bc47bf4d55:src/DiscourseAPI.php
+
 
     class DiscourseAPI
     {

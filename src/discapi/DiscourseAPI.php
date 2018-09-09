@@ -16,7 +16,7 @@
      * @noinspection MoreThanThreeArgumentsInspection
      **/
 
-    namespace richp10\discourseAPI;
+    namespace discapi;
 
     class DiscourseAPI
     {

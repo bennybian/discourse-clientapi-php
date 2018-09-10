@@ -41,7 +41,7 @@
         /**
          * getGroup
          *
-         * @param string $group name of group
+         * @param $group name of group
          * @return mixed HTTP return code and API return object
          */
 
@@ -53,8 +53,8 @@
         /**
          * joinGroup
          *
-         * @param string $groupname name of group
-         * @param string $username  user to add to the group
+         * @param $groupname name of group
+         * @param $username  user to add to the group
          *
          * @return mixed HTTP return code and API return object
          */
@@ -62,6 +62,7 @@
         {
             $groupId = $this->getGroupIdByGroupName($groupname);
             if (!$groupId) {
+				echo "group not found";
                 return false;
             }
 
@@ -75,7 +76,7 @@
         /*
          * getGroupIdByGroupName
          *
-         * @param string $groupname    name of group
+         * @param $groupname    name of group
          *
          * @return mixed id of the group, or false if nonexistent
          */
@@ -111,7 +112,7 @@
         /**
          * getGroupMembers
          *
-         * @param string $group name of group
+         * @param $group name of group
          * @return mixed HTTP return code and API return object
          */
         public function getGroupMembers($group)
@@ -123,22 +124,22 @@
         /**
          * group
          *
-         * @param string $groupname name of group to be created
+         * @param $groupname name of group to be created
          * @param array  $usernames users in the group
          *
          * @param int    $aliaslevel
-         * @param string $visible
-         * @param string $automemdomain
-         * @param string $automemretro
-         * @param string $title
-         * @param string $primegroup
-         * @param string $trustlevel
+         * @param $visible
+         * @param $automemdomain
+         * @param $automemretro
+         * @param $title
+         * @param $primegroup
+         * @param $trustlevel
          * @return mixed HTTP return code and API return object
          * @noinspection MoreThanThreeArgumentsInspection
          **/
         public function addGroup(
             $groupname,
-            array $usernames = [],
+            $usernames = [],
             $aliaslevel = 3,
             $visible = 'true',
             $automemdomain = '',
@@ -170,10 +171,10 @@
         }
 
         /**
-         * @param string $groupname
+         * @param $groupname
          * @return bool|\stdClass
          */
-        public function removeGroup(string $groupname)
+        public function removeGroup($groupname)
         {
             $groupId = $this->getGroupIdByGroupName($groupname);
             if (!$groupId) {
@@ -189,14 +190,14 @@
         /**
          * createCategory
          *
-         * @param string $categoryName name of new category
-         * @param string $color        color code of new category (six hex chars, no #)
-         * @param string $textColor    optional color code of text for new category
-         * @param string $userName     optional user to create category as
+         * @param $categoryName name of new category
+         * @param $color        color code of new category (six hex chars, no #)
+         * @param $textColor    optional color code of text for new category
+         * @param $userName     optional user to create category as
          *
          * @return mixed HTTP return code and API return object
          **/
-        public function createCategory(string $categoryName, string $color, string $textColor = '000000', string $userName = 'system')
+        public function createCategory($categoryName, $color, $textColor = '000000', $userName = 'system')
         {
             $params = [
                 'name'       => $categoryName,
@@ -211,7 +212,7 @@
          * @param $categoryName
          * @return \stdClass
          */
-        public function getCategory($categoryName): \stdClass
+        public function getCategory($categoryName)
         {
             return $this->_getRequest("/c/{$categoryName}.json");
         }
@@ -231,9 +232,9 @@
          * @param string     $email_in_allow_strangers
          * @param string     $logo_url
          * @param string     $name
-         * @param int|string $parent_category_id
+         * @param int|$parent_category_id
          * @param            $groupname
-         * @param int|string $position
+         * @param int|$position
          * @param string     $slug
          * @param string     $suppress_from_homepage
          * @param string     $text_color
@@ -307,11 +308,11 @@
         /**
          * createUser
          *
-         * @param string $userName     username of new user
+         * @param $userName     username of new user
          *
          * @return mixed HTTP return code and API return object
          */
-        public function logoutUser(string $userName)
+        public function logoutUser($userName)
         {
             $userid  = $this->getUserByUsername($userName)->apiresult->user->id;
             if (!\is_int($userid)) {
@@ -326,14 +327,14 @@
         /**
          * createUser
          *
-         * @param string $name         name of new user
-         * @param string $userName     username of new user
-         * @param string $emailAddress email address of new user
-         * @param string $password     password of new user
+         * @param $name         name of new user
+         * @param $userName     username of new user
+         * @param $emailAddress email address of new user
+         * @param $password     password of new user
          *
          * @return mixed HTTP return code and API return object
          */
-        public function createUser(string $name, string $userName, string $emailAddress, string $password)
+        public function createUser($name, $userName, $emailAddress, $password)
         {
             $obj = $this->_getRequest('/users/hp.json');
             if ($obj->http_code !== 200) {
@@ -345,10 +346,12 @@
                 'username'              => $userName,
                 'email'                 => $emailAddress,
                 'password'              => $password,
+				"active"=> true,
+"approved"=>true,
+				
                 'challenge'             => strrev($obj->apiresult->challenge),
                 'password_confirmation' => $obj->apiresult->value
             ];
-
             return $this->_postRequest('/users', [$params]);
         }
 
@@ -367,7 +370,7 @@
         /**
          * getUsernameByEmail
          *
-         * @param string $email email of user
+         * @param $email email of user
          *
          * @return mixed HTTP return code and API return object
          */
@@ -386,7 +389,7 @@
         /**
          * getUserByUsername
          *
-         * @param string $userName username of user
+         * @param $userName username of user
          *
          * @return mixed HTTP return code and API return object
          */
@@ -398,7 +401,7 @@
         /**
          * getUserByExternalID
          *
-         * @param string $externalID     external id of sso user
+         * @param $externalID     external id of sso user
          *
          * @return mixed HTTP return code and API return object
          */
@@ -410,10 +413,10 @@
         /**
          * @param        $email
          * @param        $topicId
-         * @param string $userName
+         * @param $userName
          * @return \stdClass
          */
-        public function inviteUser($email, $topicId, $userName = 'system'): \stdClass
+        public function inviteUser($email, $topicId, $userName = 'system')
         {
             $params = [
                 'email'    => $email,
@@ -426,7 +429,7 @@
         /**
          * getUserByEmail
          *
-         * @param string $email email of user
+         * @param $email email of user
          *
          * @return mixed user object
          */
@@ -447,7 +450,7 @@
         /**
          * getUserBadgesByUsername
          *
-         * @param string $userName username of user
+         * @param $userName username of user
          *
          * @return mixed HTTP return code and list of badges for given user
          */
@@ -468,7 +471,7 @@
          * @param $userName
          * @return \stdClass
          */
-        public function createPost(string $bodyText, $topicId, string $userName): \stdClass
+        public function createPost($bodyText, $topicId, $userName)
         {
             $params = [
                 'raw'       => $bodyText,
@@ -496,10 +499,10 @@
          *
          * @param        $bodyhtml
          * @param        $post_id
-         * @param string $userName
+         * @param $userName
          * @return \stdClass
          */
-        public function updatePost($bodyhtml, $post_id, $userName = 'system'): \stdClass
+        public function updatePost($bodyhtml, $post_id, $userName = 'system')
         {
             $bodyraw = htmlspecialchars_decode($bodyhtml);
             $params  = [
@@ -517,15 +520,15 @@
         /**
          * createTopic
          *
-         * @param string $topicTitle title of topic
-         * @param string $bodyText   body text of topic post
-         * @param string $categoryId
-         * @param string $userName   user to create topic as
+         * @param $topicTitle title of topic
+         * @param $bodyText   body text of topic post
+         * @param $categoryId
+         * @param $userName   user to create topic as
          * @param int    $replyToId  post id to reply as
          * @return mixed HTTP return code and API return object
-         * @internal param string $categoryName category to create topic in
+         * @internal param $categoryName category to create topic in
          **/
-        public function createTopic(string $topicTitle, string $bodyText, string $categoryId, string $userName, int $replyToId = 0)
+        public function createTopic($topicTitle, $bodyText, $categoryId, $userName, $replyToId = 0)
         {
             $params = [
                 'title'                => $topicTitle,
@@ -544,7 +547,7 @@
          * @param $topicId
          * @return \stdClass
          */
-        public function getTopic($topicId): \stdClass
+        public function getTopic($topicId)
         {
             return $this->_getRequest("/t/{$topicId}.json");
         }
@@ -552,8 +555,8 @@
         /**
          * topTopics
          *
-         * @param string $category slug of category
-         * @param string $period   daily, weekly, monthly, yearly
+         * @param $category slug of category
+         * @param $period   daily, weekly, monthly, yearly
          *
          * @return mixed HTTP return code and API return object
          */
@@ -565,7 +568,7 @@
         /**
          * latestTopics
          *
-         * @param string $category slug of category
+         * @param $category slug of category
          *
          * @return mixed HTTP return code and API return object
          */
@@ -581,7 +584,7 @@
          * @param $value
          * @return \stdClass
          */
-        public function changeSiteSetting($siteSetting, $value): \stdClass
+        public function changeSiteSetting($siteSetting, $value)
         {
             $params = [
                 $siteSetting => $value
@@ -595,14 +598,14 @@
 
         /** @noinspection MoreThanThreeArgumentsInspection */
         /**
-         * @param string $reqString
+         * @param $reqString
          * @param array  $paramArray
-         * @param string $apiUser
-         * @param string $HTTPMETHOD
+         * @param $apiUser
+         * @param $HTTPMETHOD
          * @return \stdClass
          *
          **/
-        private function _getRequest(string $reqString, array $paramArray = [], string $apiUser = 'system', $HTTPMETHOD = 'GET'): \stdClass
+        private function _getRequest($reqString, array $paramArray = [], $apiUser = 'system', $HTTPMETHOD = 'GET')
         {
             $paramArray['api_key']      = $this->_apiKey;
             $paramArray['api_username'] = $apiUser;
@@ -630,13 +633,13 @@
 
         /** @noinspection MoreThanThreeArgumentsInspection * */
         /**
-         * @param string $reqString
+         * @param $reqString
          * @param array  $paramArray
-         * @param string $apiUser
-         * @param string $HTTPMETHOD
+         * @param $apiUser
+         * @param $HTTPMETHOD
          * @return \stdClass
          **/
-        private function _putpostRequest(string $reqString, array $paramArray, string $apiUser = 'system', $HTTPMETHOD = 'POST'): \stdClass
+        private function _putpostRequest($reqString, array $paramArray, $apiUser = 'system', $HTTPMETHOD = 'POST')
         {
             $ch  = curl_init();
             $url = sprintf('%s://%s%s?api_key=%s&api_username=%s', $this->_protocol, $this->_dcHostname, $reqString, $this->_apiKey, $apiUser);
@@ -671,34 +674,34 @@
         }
 
         /**
-         * @param string $reqString
+         * @param $reqString
          * @param array  $paramArray
-         * @param string $apiUser
+         * @param $apiUser
          * @return \stdClass
          */
-        private function _deleteRequest(string $reqString, array $paramArray, string $apiUser = 'system'): \stdClass
+        private function _deleteRequest($reqString, array $paramArray, $apiUser = 'system')
         {
             return $this->_putpostRequest($reqString, $paramArray, $apiUser, 'DELETE');
         }
 
         /**
-         * @param string $reqString
+         * @param $reqString
          * @param array  $paramArray
-         * @param string $apiUser
+         * @param $apiUser
          * @return \stdClass
          */
-        private function _putRequest(string $reqString, array $paramArray, string $apiUser = 'system'): \stdClass
+        private function _putRequest($reqString, array $paramArray, $apiUser = 'system')
         {
             return $this->_putpostRequest($reqString, $paramArray, $apiUser, 'PUT');
         }
 
         /**
-         * @param string $reqString
+         * @param $reqString
          * @param array  $paramArray
-         * @param string $apiUser
+         * @param $apiUser
          * @return \stdClass
          */
-        private function _postRequest(string $reqString, array $paramArray, string $apiUser = 'system'): \stdClass
+        private function _postRequest($reqString, array $paramArray, $apiUser = 'system')
         {
             /** @noinspection ArgumentEqualsDefaultValueInspection * */
             return $this->_putpostRequest($reqString, $paramArray, $apiUser, 'POST');
@@ -709,7 +712,7 @@
          *
          * @param        $dcHostname
          * @param null   $apiKey
-         * @param string $protocol
+         * @param $protocol
          */
         public function __construct($dcHostname, $apiKey = null, $protocol = 'http')
         {

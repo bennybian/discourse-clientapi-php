@@ -366,7 +366,27 @@
         {
             return $this->_putRequest("/admin/users/{$userId}/activate", []);
         }
+		
+ /**
+         * getUserByID
+         *
+     
+         */
+        public function getUserByID($userid,$returnField="")
+        {
+            $users = $this->_getRequest("/admin/users/{$userid}.json");
+			if( $users){
+				if($returnField &&  $users->apiresult->$returnField){
+				return  $users->apiresult->$returnField;
+			}
+			   return $users;
+			}
+			
+			
+           
 
+            return false;
+        }
         /**
          * getUsernameByEmail
          *
@@ -577,6 +597,18 @@
             return $this->_getRequest('/c/' . $category . '/l/latest.json');
         }
 
+		public function updateEmailbyUsername($username, $email)
+        {
+            $params = [
+                "email" => $email
+            ];
+
+            $r=$this->_putRequest("/users/{$username}/preferences/email", [$params]);
+			var_dump($r);
+			 return;
+			
+        }
+		
         ////////////// MISC
 
         /**
@@ -594,6 +626,8 @@
         }
 
 
+		
+		
         //////////////// Private Functions
 
         /** @noinspection MoreThanThreeArgumentsInspection */
